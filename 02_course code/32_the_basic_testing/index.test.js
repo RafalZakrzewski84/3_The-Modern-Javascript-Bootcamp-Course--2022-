@@ -1,32 +1,40 @@
+const assert = require('assert');
 const { forEach, map } = require('./index.js');
 
-forEach([1, 2, 3], (value) => {
-	console.log(value);
+// forEach([1, 2, 3], (value) => {
+// 	console.log(value);
+// });
+
+// test function:
+// 1. move test from global scope, can repeat variables names
+// 2. try catch bloke no hang up app
+// 3. can pass description to distinguish tests
+const test = (description, fn) => {
+	console.log('----', description);
+	try {
+		fn();
+	} catch (error) {
+		console.log(error.message);
+	}
+};
+
+test('The forEach function', () => {
+	let sum = 0;
+	forEach([1, 2, 3], (value) => {
+		sum += value;
+	});
+
+	//node.js assert
+	assert.strictEqual(sum, 6, 'Expected summing array');
 });
 
-let sum = 0;
-forEach([1, 2, 3], (value) => {
-	sum += value;
+test('The map function', () => {
+	const result = map([1, 2, 3], (value) => {
+		return value * 2;
+	});
+
+	// assert.strictEqual(result[0], 2);
+	// assert.strictEqual(result[1], 4);
+	// assert.strictEqual(result[2], 7);
+	assert.deepEqual(result, [2, 4, 7]);
 });
-
-if (sum !== 6) {
-	throw new Error('Expected summing array to equal 6');
-} else {
-	console.log('Test for forEach passed');
-}
-
-const result = map([1, 2, 3], (value) => {
-	return value * 2;
-});
-
-if (result[0] !== 2) {
-	throw new Error(`Expected to find 2, but found ${result[0]}`);
-}
-if (result[1] !== 4) {
-	throw new Error(`Expected to find 2, but found ${result[0]}`);
-}
-if (result[2] !== 6) {
-	throw new Error(`Expected to find 2, but found ${result[0]}`);
-} else {
-	console.log('Test for map passed');
-}
