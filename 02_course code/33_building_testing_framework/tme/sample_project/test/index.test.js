@@ -19,5 +19,5 @@ it('should sum an arr', () => {
 });
 
 it('beforeEach is ran each time', () => {
-	assert.strictEqual(numbers.length, 3);
+	assert.strictEqual(numbers.length, 4);
 });

@@ -16,10 +16,20 @@ class Runner {
 
 			global.global.it = (description, fn) => {
 				beforeEaches.forEach((func) => func());
-				console.log(description);
-				fn();
+				try {
+					fn();
+					console.log(`KO - ${description}`);
+				} catch (error) {
+					console.log(`FAIL - ${description}`);
+					console.log(error.message);
+				}
 			};
-			require(file.name);
+
+			try {
+				require(file.name);
+			} catch (error) {
+				console.log(error);
+			}
 		}
 	}
 
