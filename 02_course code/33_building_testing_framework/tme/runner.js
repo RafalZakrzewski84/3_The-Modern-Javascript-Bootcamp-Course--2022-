@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const chalk = require('chalk');
 class Runner {
 	constructor() {
 		this.testFiles = [];
@@ -14,21 +15,23 @@ class Runner {
 				beforeEaches.push(fn);
 			};
 
-			global.global.it = (description, fn) => {
+			global.it = (description, fn) => {
+				console.log(chalk.grey('----' + file.fileName));
 				beforeEaches.forEach((func) => func());
 				try {
 					fn();
-					console.log(`KO - ${description}`);
+					console.log(chalk.green(`\tKO - ${description}\n`));
 				} catch (error) {
-					console.log(`FAIL - ${description}`);
-					console.log(error.message);
+					const message = error.message.replace(/\n/g, '\n\t\t');
+					console.log(chalk.red(`\tFAIL - ${description}\n`));
+					console.log(chalk.red('\t', message));
 				}
 			};
 
 			try {
 				require(file.name);
 			} catch (error) {
-				console.log(error);
+				console.log(chalk.red(error));
 			}
 		}
 	}
@@ -40,7 +43,7 @@ class Runner {
 			const stats = await fs.promises.lstat(filePath);
 
 			if (stats.isFile() && file.includes('.test.js')) {
-				this.testFiles.push({ name: filePath });
+				this.testFiles.push({ name: filePath, fileName: file });
 			} else if (stats.isDirectory()) {
 				const childFiles = await fs.promises.readdir(filePath);
 				files.push(...childFiles.map((f) => path.join(file, f)));
