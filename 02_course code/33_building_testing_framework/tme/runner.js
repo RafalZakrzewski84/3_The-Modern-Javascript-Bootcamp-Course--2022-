@@ -7,6 +7,18 @@ class Runner {
 
 	async runTests() {
 		for (let file of this.testFiles) {
+			const beforeEaches = [];
+			//implementing beforeEach and it functions
+			//global - make that functions are visible in all node files
+			global.beforeEach = (fn) => {
+				beforeEaches.push(fn);
+			};
+
+			global.global.it = (description, fn) => {
+				beforeEaches.forEach((func) => func());
+				console.log(description);
+				fn();
+			};
 			require(file.name);
 		}
 	}
