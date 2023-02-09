@@ -10,8 +10,12 @@ const render = async (filename) => {
     resources: 'usable',
   });
 
-  //return object like browser DOM
-  return dom;
+  //return dom object when file fully load
+  return new Promise((resolve, reject) => {
+    dom.window.document.addEventListener('DOMContentLoaded', () => {
+      resolve(dom);
+    });
+  });
 };
 
 module.exports = render;

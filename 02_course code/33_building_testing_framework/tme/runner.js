@@ -11,6 +11,7 @@ class Runner {
 
   async runTests() {
     for (let file of this.testFiles) {
+      console.log(chalk.grey('---- ' + file.fileName));
       const beforeEaches = [];
 
       global.render = render;
@@ -21,11 +22,10 @@ class Runner {
       };
 
       global.it = async (description, fn) => {
-        console.log(chalk.grey('---- ' + file.fileName));
         beforeEaches.forEach((func) => func());
         try {
           await fn();
-          console.log(chalk.green(`\tKO - ${description}\n`));
+          console.log(chalk.green(`\tKO - ${description}`));
         } catch (error) {
           const message = error.message.replace(/\n/g, '\n\t\t');
           console.log(chalk.red(`\tFAIL - ${description}\n`));
