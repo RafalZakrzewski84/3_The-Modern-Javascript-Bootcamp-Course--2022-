@@ -10,6 +10,7 @@ const render = async (filename) => {
     resources: 'usable',
   });
 
+  //return object like browser DOM
   return dom;
 };
 

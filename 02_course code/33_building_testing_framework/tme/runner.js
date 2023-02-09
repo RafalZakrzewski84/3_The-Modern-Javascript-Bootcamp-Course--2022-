@@ -20,11 +20,11 @@ class Runner {
         beforeEaches.push(fn);
       };
 
-      global.it = (description, fn) => {
+      global.it = async (description, fn) => {
         console.log(chalk.grey('---- ' + file.fileName));
         beforeEaches.forEach((func) => func());
         try {
-          fn();
+          await fn();
           console.log(chalk.green(`\tKO - ${description}\n`));
         } catch (error) {
           const message = error.message.replace(/\n/g, '\n\t\t');
